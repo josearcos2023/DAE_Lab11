@@ -8,6 +8,8 @@
             <th>Nombre</th>
             <th>Marca</th>
             <th>Precio</th>
+            <th>Stock</th>
+            <th colspan="2">Acciones</th>
         </thead>
         <tbody>
             {% for row in data %}
@@ -16,6 +18,11 @@
                     <td>{{ row[1] }}</td>
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>
+                        <a href="{{ url_for('borrar_producto', codigo=row[0]) }}" class="btn btn-danger btn-sm">Borrar</a>
+                    </td>
+                    <td><button class="btn btn-success btn-sm">Editar</button></td>
                 </tr>
             {% endfor %}
         </tbody>    
