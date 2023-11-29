@@ -30,16 +30,16 @@ def index():
 
 @app.route('/productos')
 def productos():
-    #lista de datos de la DB
-    #creamos un cursor
-    cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM productos')
-    data = cur.fetchall()
-    cur.close()
-
-    # print(data)
     
-    return render_template('productos.html',data=data)
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM productos')
+        data = cur.fetchall()
+        cur.close()
+        return render_template('productos.html', data=data)
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return "An error occurred while fetching data from the database."
 
 
 @app.route('/nuevo_producto', methods=['GET', 'POST'])
@@ -51,13 +51,10 @@ def nuevo_producto():
         precio = request.form['precio']
         stock = request.form['stock']
 
-        # Create a cursor
         cur = mysql.connection.cursor()
 
-        # Insert new product into the database
         cur.execute("INSERT INTO productos (nombre, marca, precio, stock) VALUES (%s, %s, %s, %s)", (nombre, marca, precio, stock))
 
-        # Commit the transaction and close the cursor
         mysql.connection.commit()
         cur.close()
 
@@ -65,20 +62,26 @@ def nuevo_producto():
 
     return render_template('nuevo_producto.html')
 
-@app.route('/borrar_producto/<int:codigo>', methods=['GET', 'POST'])
-def borrar_producto(codigo):
-    if request.method == 'POST':
-        # Create a cursor
-        cur = mysql.connection.cursor()
+# @app.route('/borrar_producto/<int:codigo>', methods=['POST'])
+# def borrar_producto(codigo):
 
-        # Delete the product from the database
-        cur.execute("DELETE FROM productos WHERE codigo = %s", (codigo,))
+#     cur = mysql.connection.cursor()
+        
+#     cur.execute("DELETE FROM productos WHERE codigo = %s", (codigo))
 
-        # Commit the transaction and close the cursor
-        mysql.connection.commit()
-        cur.close()
+#     mysql.connection.commit()
+#     cur.close()
 
-        return redirect(url_for('productos'))
+#     return redirect(url_for('productos'))
+
+@app.route('/borrar_producto', methods=['POST'])
+def borrar_producto():
+    id = request.form.get("id")
+    
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM productos WHERE codigo = %s", (id,))
+    mysql.connection.commit()
+    cur.close()
 
     return redirect(url_for('productos'))
 

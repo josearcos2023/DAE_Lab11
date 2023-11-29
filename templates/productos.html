@@ -2,6 +2,9 @@
 {% block body %}
   
 <div>
+    <div>
+        <a href={{ url_for('nuevo_producto') }} class="btn btn-primary">Nuevo</a>
+    </div>
     <table class="table">
         <thead>
             <th>Código</th>
@@ -20,9 +23,16 @@
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
                     <td>
-                        <a href="{{ url_for('borrar_producto', codigo=row[0]) }}" class="btn btn-danger btn-sm">Borrar</a>
+                        <form method="POST" action="./borrar_producto">
+                            <input type="hidden" value={{ row[0] }} name="id">
+                            <button type="submit" class="btn btn-success btn-sm">Borrar</button>
+                        </form>
                     </td>
-                    <td><button class="btn btn-success btn-sm">Editar</button></td>
+                    <!-- <td>
+                        <form method="POST" action="./borrar_producto">
+                            <button type="submit" class="btn btn-success btn-sm">Borrar</button>
+                        </form>
+                    </td> -->
                 </tr>
             {% endfor %}
         </tbody>    
