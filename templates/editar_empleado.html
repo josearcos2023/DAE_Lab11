@@ -1,0 +1,32 @@
+{% extends "./layout.html" %}
+{% block body %}
+<div class="container">
+    <div>
+        <h3>Editar empleado</h3>
+    </div>
+    <form method="POST" action="./editar">
+        <input type="hidden" value={{ data[0][0] }} name="id">
+        <div class="mb-3">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" value={{ data[0][1] }} required><br>
+        </div>
+        <div class="mb-3">
+            <label for="apellido">Apellidos</label>
+            <input type="text" id="apellido" name="apellido" value={{ data[0][2] }}  required><br>
+        </div>
+        <div class="mb-3">
+            <label for="telefono">Teléfono</label>
+            <input type="number" id="telefono" name="telefono" value={{ data[0][3] }} required><br>
+        </div>
+        <div class="mb-3">
+            <label for="carrera">Carrera</label>
+            <input type="text" id="carrera" name="carrera" value={{ data[0][4] }} required><br>
+        </div>
+        <div class="mb-3">
+            <label for="pais">País</label>
+            <input type="text" id="pais" name="pais" value={{ data[0][5] }} required><br>
+        </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+</div>
+{% endblock %}

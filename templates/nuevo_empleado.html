@@ -1,0 +1,25 @@
+{% extends "./layout.html" %}
+{% block body %}
+
+    <h1>Nuevo Empleado</h1>
+    <div>
+        <form method="post" action="{{ url_for('nuevo_producto') }}">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" required><br>
+            
+            <label for="apellido">Apellido:</label>
+            <input type="text" name="apellido" id="apellido" required><br>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="number" name="telefono" id="telefono" max="999999999" min="900000000" required><br>
+            
+            <label for="carrera">Carrera:</label>
+            <input type="text" name="carrera" id="carrera" required><br>
+            
+            <label for="pais">País:</label>
+            <input type="text" name="pais" id="pais" required><br>
+
+            <button class="btn btn-primary" type="submit">Agregar Empleado</button>
+        </form>
+    </div>
+{% endblock %}

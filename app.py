@@ -2,9 +2,6 @@ from flask import Flask,render_template
 from flask import request,redirect,url_for
 from flask_mysqldb import MySQL
 
-# Crear una app para comprobar
-# el funcionamiento del archivo main
-
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -28,62 +25,78 @@ def index():
     # return "<h1>Alumnos de Flask</h1>"
     return render_template('index.html',data=data)
 
-@app.route('/productos')
-def productos():
-    
+@app.route('/empleados')
+def empleados():
     try:
         cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM productos')
+        cur.execute('SELECT * FROM empleado')
         data = cur.fetchall()
         cur.close()
-        return render_template('productos.html', data=data)
+        return render_template('empleados.html', data=data)
     except Exception as e:
         print(f"Error: {str(e)}")
-        return "An error occurred while fetching data from the database."
+        return "Ha ocurrido un error al tomar la información de la base de datos"
 
 
-@app.route('/nuevo_producto', methods=['GET', 'POST'])
+@app.route('/nuevo_empleado', methods=['GET', 'POST'])
 def nuevo_producto():
     if request.method == 'POST':
-        # Get form data
+
         nombre = request.form['nombre']
-        marca = request.form['marca']
-        precio = request.form['precio']
-        stock = request.form['stock']
+        apellido = request.form['apellido']
+        telefono = request.form['telefono']
+        carrera = request.form['carrera']
+        pais = request.form['pais']
 
         cur = mysql.connection.cursor()
-
-        cur.execute("INSERT INTO productos (nombre, marca, precio, stock) VALUES (%s, %s, %s, %s)", (nombre, marca, precio, stock))
-
+        cur.execute("INSERT INTO empleado (nombre, apellido, telefono, carrera, pais) VALUES (%s, %s, %s, %s, %s)", (nombre, apellido, telefono, carrera, pais))
         mysql.connection.commit()
         cur.close()
 
-        return redirect(url_for('productos'))
+        return redirect('empleados')
+        # return redirect(url_for('empleados'))
 
-    return render_template('nuevo_producto.html')
+    return render_template('nuevo_empleado.html')
 
-# @app.route('/borrar_producto/<int:codigo>', methods=['POST'])
-# def borrar_producto(codigo):
-
-#     cur = mysql.connection.cursor()
-        
-#     cur.execute("DELETE FROM productos WHERE codigo = %s", (codigo))
-
-#     mysql.connection.commit()
-#     cur.close()
-
-#     return redirect(url_for('productos'))
-
-@app.route('/borrar_producto', methods=['POST'])
+@app.route('/borrar_empleado', methods=['POST'])
 def borrar_producto():
     id = request.form.get("id")
     
     cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM productos WHERE codigo = %s", (id,))
+    cur.execute("DELETE FROM empleado WHERE id = %s", (id,))
     mysql.connection.commit()
     cur.close()
 
-    return redirect(url_for('productos'))
+    return redirect('/empleados')
+
+@app.route('/editar_empleado', methods=['GET','POST'])
+def editar_producto():
+    if request.method == 'POST':
+        id = request.form.get("id")
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM empleado WHERE id = %s', (id,))
+        data = cur.fetchall()
+        print(data)
+        cur.close()
+    return render_template('editar_empleado.html', data=data)
+
+@app.route('/editar', methods=['POST'])
+def editar():
+    
+    id = request.form['id']
+    nombre = request.form['nombre']
+    apellido = request.form['apellido']
+    telefono = request.form['telefono']
+    carrera = request.form['carrera']
+    pais = request.form['pais']
+
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE empleado SET nombre=%s, apellido=%s, telefono=%s, carrera=%s, pais=%s WHERE id=%s", (nombre, apellido, telefono, carrera, pais, id))
+    mysql.connection.commit()
+    cur.close()
+    
+    return redirect("/empleados")
+
 
 if __name__=='__main__':
     app.run(debug=True, port=5000)

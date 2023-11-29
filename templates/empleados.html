@@ -1,7 +1,7 @@
 {% extends "./layout.html" %}
 {% block body %}
   
-<div>
+<div class="container">
     <div>
         <a href={{ url_for('nuevo_producto') }} class="btn btn-primary">Nuevo</a>
     </div>
@@ -9,10 +9,11 @@
         <thead>
             <th>Código</th>
             <th>Nombre</th>
-            <th>Marca</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th colspan="2">Acciones</th>
+            <th>Apellidos</th>
+            <th>Teléfono</th>
+            <th>Carrera</th>
+            <th>País</th>
+            <th colspan="2">Acción</th>
         </thead>
         <tbody>
             {% for row in data %}
@@ -22,17 +23,19 @@
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
                     <td>
-                        <form method="POST" action="./borrar_producto">
+                        <form method="POST" action="./borrar_empleado" onsubmit="return confirmarBorrado()">
                             <input type="hidden" value={{ row[0] }} name="id">
-                            <button type="submit" class="btn btn-success btn-sm">Borrar</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
                         </form>
                     </td>
-                    <!-- <td>
-                        <form method="POST" action="./borrar_producto">
-                            <button type="submit" class="btn btn-success btn-sm">Borrar</button>
+                    <td>
+                        <form method="POST" action="./editar_empleado">
+                            <input type="hidden" value={{ row[0] }} name="id">
+                            <button type="submit" class="btn btn-success btn-sm">Editar</button>
                         </form>
-                    </td> -->
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>    
